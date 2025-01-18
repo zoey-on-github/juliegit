@@ -9,9 +9,14 @@
   "author": "julieonnode",
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "tsx": "^4.19.2",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "@types/node": "^22.10.7",
     "@types/yargs": "^17.0.33"
+  },
+  "bin": {
+    "jgit": "./bin/index.ts"
   }
 }
