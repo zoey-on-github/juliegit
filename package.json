@@ -7,5 +7,11 @@
     "test": "node ./index.js"
   },
   "author": "julieonnode",
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/yargs": "^17.0.33"
+  }
 }
