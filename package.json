@@ -1,0 +1,11 @@
+{
+  "name": "juliegit",
+  "version": "1.0.0",
+  "description": "git impl",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./index.js"
+  },
+  "author": "julieonnode",
+  "license": "GPL-3.0-or-later"
+}
