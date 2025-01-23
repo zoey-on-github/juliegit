@@ -41,7 +41,12 @@ function repoDir(repo:string, path:string,mkdir:boolean) {
         console.error("not a directory");
         if(mkdir) {
             fs.mkdir(path);
+            return path;
+        } else {
+            return null;
         }
     }
 }
+
+function repoCreate(path: string) {}
 
