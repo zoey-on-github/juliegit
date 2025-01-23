@@ -12,15 +12,18 @@ class gitRepository {
     conf: any;
     constructor(path: string, force: boolean) {
         this.worktree = path;
-        this.gitdir = path + ".git"
+        this.gitdir = path + ".git";
         if(!fs.existsSync(this.gitdir)) {
-            console.error("Not a git directory")
+            console.error("Not a git directory");
         }
         var configFile = path.join(repoFile,"config")
         if(fs.existsSync(configFile)) {
-                 fs.readFileSync(configFile,"utf8")
+                 fs.readFileSync(configFile,"utf8");
         }
     }
 
+}
+function repoPath(path: string) {
+    path.join(path.gitdir, path)
 }
 
