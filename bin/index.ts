@@ -55,5 +55,8 @@ function repoCreate(path: string) {
         if(fs.lstatSync(repo.worktree).isDirectory) {                  // no need to error handle here, because node throws an error if this is false
            fs.mkdirSync(repo.worktree);
     }
+    assert(repoDir(gitRepository.gitdir,"branches",false));
+    assert(repoDir(gitRepository.gitdir,"objects",false));
+    assert(repoDir(gitRepository.gitdir,"refs",false));
 }
 }
