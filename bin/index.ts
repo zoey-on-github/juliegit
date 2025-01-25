@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import { readFile } from "node:fs";
 import process from 'node:process';
 import assert from 'node:assert'
+import parse from 'ini';
 class gitRepository {
     worktree: string;
     static gitdir: string;
@@ -19,6 +20,7 @@ class gitRepository {
         this.conf = repoFile + "config"
         if(fs.existsSync(this.conf)) {
                  fs.readFileSync(this.conf,"utf8");
+                 parse(this.conf);
         }
     }
 
@@ -51,12 +53,15 @@ function repoDir(repo:string, path:string,mkdir:boolean) {
 function repoCreate(path: string) {
     var repo = new gitRepository(path,true)
 
+    assert(repoDir(gitRepository.gitdir,"refs/tags",false));
     if(fs.existsSync(repo.worktree)) {
         if(fs.lstatSync(repo.worktree).isDirectory) {                  // no need to error handle here, because node throws an error if this is false
            fs.mkdirSync(repo.worktree);
     }
     assert(repoDir(gitRepository.gitdir,"branches",false));
     assert(repoDir(gitRepository.gitdir,"objects",false));
-    assert(repoDir(gitRepository.gitdir,"refs",false));
+    assert(repoDir(gitRepository.gitdir,"refs/tags",false));
+    assert(repoDir(gitRepository.gitdir,"refs/heads",false));
+    
 }
 }
