@@ -48,7 +48,6 @@ function repoDir(repo:string, path:string,mkdir:boolean) {
             return null;
         }
     }
-}
 
 function repoCreate(path: string) {
     var repo = new gitRepository(path,true)
@@ -67,7 +66,14 @@ function repoCreate(path: string) {
     fs.writeFileSync(repo + "/HEAD", "ref: refs/heads/master")
 
     const config = ini.parse(repo.conf);
-    config.
+    config.repositoryFormatVersion = "0"
+    config.filemode = "False"
+    config.bare = "false"
+    var text:string = ini.stringify(config, {section: 'core'})
+    await writeFile(repo.conf, text)
 }
-
+const parser = new ArgumentParser({
+    description: 'Argparse example'
+  });
+  parser.add_argument('init', )
 }
