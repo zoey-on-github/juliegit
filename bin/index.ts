@@ -1,4 +1,3 @@
-import * as yargs from "yargs";
 import * as crypto from 'node:crypto';
 import os from 'node:zlib';
 import path from 'node:path';
