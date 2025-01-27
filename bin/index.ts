@@ -62,6 +62,12 @@ function repoCreate(path: string) {
     assert(repoDir(gitRepository.gitdir,"objects",false));
     assert(repoDir(gitRepository.gitdir,"refs/tags",false));
     assert(repoDir(gitRepository.gitdir,"refs/heads",false));
-    
+   
+    fs.writeFileSync(repo + "/description", "Unnamed repository; edit this file 'description' to name the repository.")
+    fs.writeFileSync(repo + "/HEAD", "ref: refs/heads/master")
+
+    const config = ini.parse(repo.conf);
+    config.
 }
+
 }
