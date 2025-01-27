@@ -1,11 +1,12 @@
 import * as crypto from 'node:crypto';
+import * as argparse from 'argparse';
 import os from 'node:zlib';
 import path from 'node:path';
 import fs from 'node:fs';
 import { readFile } from "node:fs";
 import process from 'node:process';
 import assert from 'node:assert'
-import parse from 'ini';
+import * as ini from 'ini';
 class gitRepository {
     worktree: string;
     static gitdir: string;
@@ -19,7 +20,7 @@ class gitRepository {
         this.conf = repoFile + "config"
         if(fs.existsSync(this.conf)) {
                  fs.readFileSync(this.conf,"utf8");
-                 parse(this.conf);
+                 ini.parse(this.conf);
         }
     }
 
