@@ -15,10 +15,9 @@
   },
   "devDependencies": {
     "@types/argparse": "^2.0.17",
-    "@types/node": "^22.10.10",
-    "@types/yargs": "^17.0.33"
+    "@types/node": "^22.10.10"
   },
   "bin": {
-    "jgit": "./bin/index.ts"
+    "jgit": "./built/index.js"
   }
 }

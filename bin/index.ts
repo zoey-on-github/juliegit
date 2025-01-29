@@ -1,10 +1,11 @@
+#!/usr/bin/env node
 import * as crypto from 'node:crypto';
 import * as argparse from 'argparse';
 import os from 'node:zlib';
 import path from 'node:path';
 import fs from 'node:fs';
 import { readFile } from "node:fs";
-import process from 'node:process';
+import process, { argv } from 'node:process';
 import assert from 'node:assert'
 import * as ini from 'ini';
 class gitRepository {
@@ -14,8 +15,10 @@ class gitRepository {
     constructor(path: string, force: boolean) {
         this.worktree = path;
         gitRepository.gitdir = path + ".git";
+        if(!force) {
         if(!fs.existsSync(gitRepository.gitdir)) {
             console.error("Not a git directory");
+        }
         }
         this.conf = repoFile + "config"
         if(fs.existsSync(this.conf)) {
@@ -48,14 +51,17 @@ function repoDir(repo:string, path:string,mkdir:boolean) {
             return null;
         }
     }
-
+}
 function repoCreate(path: string) {
     var repo = new gitRepository(path,true)
 
-    assert(repoDir(gitRepository.gitdir,"refs/tags",false));
+    //assert(repoDir(gitRepository.gitdir,"refs/tags",false)); why on earth was i checking this twice?
     if(fs.existsSync(repo.worktree)) {
-        if(fs.lstatSync(repo.worktree).isDirectory) {                  // no need to error handle here, because node throws an error if this is false
-           fs.mkdirSync(repo.worktree);
+        if(!fs.lstatSync(repo.worktree).isDirectory) {                  // no need to error handle here, because node throws an error if this is false
+           console.log("not a directory");
+    }
+    } else {
+            fs.mkdirSync(repo.worktree);
     }
     assert(repoDir(gitRepository.gitdir,"branches",false));
     assert(repoDir(gitRepository.gitdir,"objects",false));
@@ -70,10 +76,27 @@ function repoCreate(path: string) {
     config.filemode = "False"
     config.bare = "false"
     var text:string = ini.stringify(config, {section: 'core'})
-    await writeFile(repo.conf, text)
+    fs.writeFileSync(repo.conf, text)
 }
-const parser = new ArgumentParser({
+
+const parser = new argparse.ArgumentParser({
     description: 'Argparse example'
   });
-  parser.add_argument('init', )
+  //parser.add_argument('init', "make new git repo")
+
+//parser.add_subparsers("init")
+const argSubParsers = parser.add_subparsers({title:"commands", dest:"command"})
+const argsp = argSubParsers.add_parser("init",{help:"Initialize a new repo"})
+argsp.add_argument("path",({metavar:"directory","nargs":"?",default:".",help:"where to create the repo"}))
+function commandInit(args) {
+        repoCreate(args.path)
 }
+const args = JSON.parse(JSON.stringify(parser.parse_args()));
+if(args.command == "init") {
+        repoCreate(args.path)
+        //console.log("help me god")
+}
+console.log(typeof args);
+console.log(args);
+console.log(args.command)
+console.log(args.path)
