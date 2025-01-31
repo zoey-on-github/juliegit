@@ -72,7 +72,9 @@ function repoCreate(path: string) {
     assert(repoDir(gitRepository.gitdir,"refs/tags",true));
     assert(repoDir(gitRepository.gitdir,"refs/heads",true));
     */
+   if(!fs.existsSync(gitRepository.gitdir)) {
    fs.mkdirSync(gitRepository.gitdir)
+   }
     fs.writeFileSync(gitRepository.gitdir + "/description", "Unnamed repository; edit this file 'description' to name the repository.",{flag:"w+"})
     fs.writeFileSync(gitRepository.gitdir + "/HEAD", "ref: refs/heads/master",{flag:"w+"})
 
