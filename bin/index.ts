@@ -13,14 +13,14 @@ class gitRepository {
     static gitdir: string;
     conf: string;
     constructor(path: string, force: boolean) {
-        this.worktree = path;
-        gitRepository.gitdir = path + ".git";
+        this.worktree = path; gitRepository.gitdir = path + "/.git";
         if(!force) {
         if(!fs.existsSync(gitRepository.gitdir)) {
             console.error("Not a git directory");
         }
         }
-        this.conf = repoFile + "config"
+        //this.conf = repoFile + "config"
+        this.conf = gitRepository.gitdir + "/.config"
         if(fs.existsSync(this.conf)) {
                  fs.readFileSync(this.conf,"utf8");
                  ini.parse(this.conf);
@@ -33,17 +33,19 @@ function repoPath(path: string, repo:string) {
 }
 
 function repoFile(repo:string, path:string, mkdir:boolean) {
-    if(repoDir(repo,path,mkdir=mkdir)) {
+    if(repoDir(repo,path,mkdir)) {
         return repoPath(repo,path);
     }
 }
 
 function repoDir(repo:string, path:string,mkdir:boolean) {
-    path = repoPath(repo, path)
+    //path = repoPath(repo, path)
     if(fs.existsSync(path)) {
-        return path;
+        if(!fs.lstatSync(path).isDirectory) {
+                console.error("not a directory")
+        }
     } else {
-        console.error("not a directory");
+        console.error("file doesn't exist'");
         if(mkdir) {
             fs.mkdirSync(path);
             return path;
@@ -63,13 +65,16 @@ function repoCreate(path: string) {
     } else {
             fs.mkdirSync(repo.worktree);
     }
-    assert(repoDir(gitRepository.gitdir,"branches",false));
-    assert(repoDir(gitRepository.gitdir,"objects",false));
-    assert(repoDir(gitRepository.gitdir,"refs/tags",false));
-    assert(repoDir(gitRepository.gitdir,"refs/heads",false));
-   
-    fs.writeFileSync(repo + "/description", "Unnamed repository; edit this file 'description' to name the repository.")
-    fs.writeFileSync(repo + "/HEAD", "ref: refs/heads/master")
+    console.log(gitRepository.gitdir);
+    /*
+    assert(repoDir(gitRepository.gitdir,"branches",true));
+    assert(repoDir(gitRepository.gitdir,"objects",true));
+    assert(repoDir(gitRepository.gitdir,"refs/tags",true));
+    assert(repoDir(gitRepository.gitdir,"refs/heads",true));
+    */
+   fs.mkdirSync(gitRepository.gitdir)
+    fs.writeFileSync(gitRepository.gitdir + "/description", "Unnamed repository; edit this file 'description' to name the repository.",{flag:"w+"})
+    fs.writeFileSync(gitRepository.gitdir + "/HEAD", "ref: refs/heads/master",{flag:"w+"})
 
     const config = ini.parse(repo.conf);
     config.repositoryFormatVersion = "0"
@@ -77,6 +82,7 @@ function repoCreate(path: string) {
     config.bare = "false"
     var text:string = ini.stringify(config, {section: 'core'})
     fs.writeFileSync(repo.conf, text)
+    return repo;
 }
 
 const parser = new argparse.ArgumentParser({
@@ -91,12 +97,11 @@ argsp.add_argument("path",({metavar:"directory","nargs":"?",default:".",help:"wh
 function commandInit(args) {
         repoCreate(args.path)
 }
-const args = JSON.parse(JSON.stringify(parser.parse_args()));
+const args = parser.parse_args();
 if(args.command == "init") {
+        console.log(typeof args.command)
         repoCreate(args.path)
         //console.log("help me god")
 }
-console.log(typeof args);
-console.log(args);
-console.log(args.command)
-console.log(args.path)
+//console.log(args.command)
+//console.log(args.path)

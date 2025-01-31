@@ -4,7 +4,8 @@
       "allowJs": true,
       "target": "es6",
       "esModuleInterop": true,
-      "module":"nodenext"
+      "module":"nodenext",
+      "sourceMap": true
     },
     "include": ["./bin"]
   }
